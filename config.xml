@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<widget xmlns="http://www.w3.org/ns/widgets"
+    xmlns:gap="http://phonegap.com/ns/1.0"
+    id="com.itvarsity.contactbook"
+    version="1.0.0"
+    gap:versionCode="10">
+
+    <name>Contact Book</name>
+
+    <description>
+        Save, edit, and delete your contacts more efficiently.
+    </description>    
+
+    <author email="angela.morris@yahoo.com">Angela Morris</author>
+
+</widget>

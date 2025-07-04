@@ -1,0 +1,74 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Contact Book</title>
+</head>
+<body onload="fetchContacts()">
+    <div id="menu">
+    <input type="text" id="searchInput" placeholder="Search contacts..."/>  
+    <button id="refresh" type="button">Refresh</button>
+    <button id="addContact" type="button">Add Contact</button>
+    </div> 
+    <table id="table">Contacts loading...</table>
+    <script src="config.js"></script>
+    <script>
+        var allContacts = []; // Store all contacts for searching
+
+        document.getElementById("refresh").addEventListener('click', fetchContacts);
+        document.getElementById("addContact").addEventListener('click', addContact);
+        document.getElementById("searchInput").addEventListener('input', handlesearch);
+
+        function fetchContacts(){
+            fetch(rootPath + "controller/get-contacts/")
+            .then(function(response){
+                return response.json();
+            })
+            .then(function(data){
+                allContacts = data; // Save full list
+                displayOutput(data);
+            })
+        }
+
+        function displayOutput(data){
+            output = `<table>
+                <tr>
+                    <th>Picture</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                </tr>
+            `;
+            
+            for(a in data){
+                output += `
+                    <tr onclick="editContact(${data[a].id})">
+                        <td><img src="${rootPath}controller/uploads/${data[a].avatar}" width="40"/></td>
+                        <td><h5>${data[a].firstname}</h5></td>
+                        <td><h5>${data[a].lastname}</h5></td>
+                    </tr>
+                `
+            }
+            output +="</table>";
+            document.getElementById("table").innerHTML = output;
+        }
+
+        function handlesearch(e){
+            var keyword = e.target.value.toLowerCase();
+            var filtered = allContacts.filter(function(contact){
+                return contact.firstname.toLowerCase().includes(keyword) ||
+                       contact.lastname.toLowerCase().includes(keyword) ||
+                       (contact.mobile && contact.mobile.toLowerCase().includes(keyword)) ||
+                       (contact.email && contact.email.toLowerCase().includes(keyword));
+            });
+            displayOutput(filtered);
+        }
+
+        function addContact(){
+            window.open("add-contact.html", "_self");
+        }
+
+        function editContact(id){
+            window.open("edit-contact.html?id=" + id, "_self");
+        }
+    </script>
+</body>
+</html>
